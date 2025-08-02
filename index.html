@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Guide Simple - Comment créer ton site web avec GitHub et Render</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --primary-light: #93C5FD;
+            --primary-lighter: #DBEAFE;
+            --primary-dark: #2563EB;
+            --secondary-color: #1F2937;
+            --success-color: #22C55E;
+            --warning-color: #F59E0B;
+            --danger-color: #EF4444;
+            --text-color: #1F2937;
+            --text-muted: #6B7280;
+            --background: #FAFBFF;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
+            --border-radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --font-family: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar h2::before {
+            content: "📋";
+            font-size: 1.8rem;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section h3 {
+            color: var(--primary-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link:hover {
+            background-color: var(--primary-lighter);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+            max-width: calc(100% - 280px);
+        }
+
+        .header {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.3) 0%, #3B82F6 15%, #1F2937 85%, rgba(0, 0, 0, 0.4) 100%) !important;
+            padding: 35px 40px !important;
+            color: white !important;
+            text-align: center !important;
+            box-shadow: 0 8px 24px rgba(31, 41, 55, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 0 30px rgba(59, 130, 246, 0.2) !important;
+            animation: fadeIn 0.8s ease-out, subtle-header-pulse 4s infinite !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+            animation: header-shine 4s infinite;
+            z-index: 1;
+        }
+        
+        .header h1, .header p {
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        .header h1 {
+            margin: 0 !important;
+            font-size: 2.5rem !important;
+            font-weight: 700 !important;
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .header p {
+            margin-top: 12px !important;
+            margin-bottom: 0 !important;
+            font-size: 1.2rem !important;
+            color: rgba(255, 255, 255, 0.95) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+            font-weight: 500 !important;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes subtle-header-pulse {
+            0% {
+                box-shadow: 0 8px 24px rgba(31, 41, 55, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 0 30px rgba(59, 130, 246, 0.2);
+            }
+            50% {
+                box-shadow: 0 8px 24px rgba(31, 41, 55, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 0 35px rgba(59, 130, 246, 0.3);
+            }
+            100% {
+                box-shadow: 0 8px 24px rgba(31, 41, 55, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.2), 0 0 30px rgba(59, 130, 246, 0.2);
+            }
+        }
+        
+        @keyframes header-shine {
+            0%, 50% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .content {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-top: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc {
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--card-bg) 100%);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .toc-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .toc-link:hover {
+            background-color: var(--primary-lighter);
+            transform: translateX(4px);
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--card-bg) 100%);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-card h4 {
+            color: var(--primary-dark);
+            margin-top: 0;
+        }
+
+        .warning-card {
+            background: linear-gradient(135deg, #FEF3C7 0%, var(--card-bg) 100%);
+            border: 1px solid var(--warning-color);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, #DCFCE7 0%, var(--card-bg) 100%);
+            border: 1px solid var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .danger-card {
+            background: linear-gradient(135deg, #FEE2E2 0%, var(--card-bg) 100%);
+            border: 1px solid var(--danger-color);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .code-block {
+            background: var(--secondary-color);
+            color: #F9FAFB;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            white-space: pre-wrap;
+        }
+
+        .inline-code {
+            background: #E5E7EB;
+            color: var(--secondary-color);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-lighter);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #F8FAFC;
+        }
+
+        tr:hover {
+            background: var(--primary-lighter);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .app-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .app-card .app-url {
+            background: #F3F4F6;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+            word-break: break-all;
+        }
+
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <h2>Mon Premier Site Web</h2>
+            
+            <div class="nav-section">
+                <h3>Commencer</h3>
+                <a href="#vue-ensemble" class="nav-link">🎯 Introduction</a>
+                <a href="#preparation" class="nav-link">📚 Préparation</a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Étapes GitHub</h3>
+                <a href="#etape1" class="nav-link">📝 Créer compte GitHub</a>
+                <a href="#etape2" class="nav-link">📁 Créer mon dépôt</a>
+                <a href="#etape3" class="nav-link">✍️ Écrire mes fichiers</a>
+                <a href="#etape4" class="nav-link">☁️ Mettre en ligne</a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Déploiement Render</h3>
+                <a href="#etape5" class="nav-link">🌐 Créer compte Render</a>
+                <a href="#etape6" class="nav-link">🔗 Connecter GitHub</a>
+                <a href="#etape7" class="nav-link">🚀 Publier mon site</a>
+            </div>
+
+            <div class="nav-section">
+                <h3>Terminer</h3>
+                <a href="#felicitations" class="nav-link">🎉 Bravo !</a>
+                <a href="#aide-claude" class="nav-link">🤖 Aide de Claude Code</a>
+                <a href="#support" class="nav-link">📞 Aide supplémentaire</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <header class="header">
+                <h1><span class="emoji">🌟</span>Comment créer ton premier site web avec GitHub et Render</h1>
+                <p>Un guide simple et amusant pour créer ton site web et le publier sur internet !</p>
+                <p><strong>Temps estimé :</strong> 30-45 minutes | <strong>Coût :</strong> Gratuit ! | <strong>Prérequis :</strong> Un ordinateur et une adresse email</p>
+            </header>
+
+        <div class="content">
+
+            <section id="vue-ensemble">
+                <div class="toc">
+                    <h3><span class="emoji">🎯</span>Qu'est-ce que tu vas apprendre ?</h3>
+                    <p>Dans ce guide super facile, tu vas apprendre à créer ton propre site web et à le publier sur internet pour que tout le monde puisse le voir ! C'est comme construire ta propre maison numérique ! 🏠</p>
+                    
+                    <div class="toc-grid">
+                        <a href="#etape1" class="toc-link"><span class="step-number">1</span> Créer mon compte GitHub</a>
+                        <a href="#etape2" class="toc-link"><span class="step-number">2</span> Créer mon premier dépôt</a>
+                        <a href="#etape3" class="toc-link"><span class="step-number">3</span> Écrire mes fichiers web</a>
+                        <a href="#etape4" class="toc-link"><span class="step-number">4</span> Envoyer sur GitHub</a>
+                        <a href="#etape5" class="toc-link"><span class="step-number">5</span> Créer mon compte Render</a>
+                        <a href="#etape6" class="toc-link"><span class="step-number">6</span> Connecter avec GitHub</a>
+                        <a href="#etape7" class="toc-link"><span class="step-number">7</span> Publier mon site !</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="preparation">
+                <h2><span class="emoji">📚</span>Préparation : Ce dont tu as besoin</h2>
+                
+                <div class="app-grid">
+                    <div class="app-card">
+                        <h4><span class="emoji">💻</span>Un ordinateur</h4>
+                        <p><strong>N'importe quel ordinateur fonctionne !</strong></p>
+                        <ul>
+                            <li>Windows, Mac ou Linux</li>
+                            <li>Une connexion internet</li>
+                            <li>Un navigateur web (Chrome, Firefox, Safari...)</li>
+                        </ul>
+                        <p><strong>Astuce :</strong> Tu peux même le faire sur une tablette !</p>
+                    </div>
+
+                    <div class="app-card">
+                        <h4><span class="emoji">📧</span>Une adresse email</h4>
+                        <p><strong>Pour créer tes comptes</strong></p>
+                        <ul>
+                            <li>Gmail, Yahoo, Outlook, etc.</li>
+                            <li>Tu dois pouvoir recevoir des emails</li>
+                            <li>C'est tout !</li>
+                        </ul>
+                        <p><strong>Conseil :</strong> Utilise une adresse que tu consultes souvent</p>
+                    </div>
+
+                    <div class="app-card">
+                        <h4><span class="emoji">✨</span>Claude Code (optionnel)</h4>
+                        <p><strong>Ton assistant IA pour t'aider</strong></p>
+                        <ul>
+                            <li>Claude Code peut écrire ton code à ta place</li>
+                            <li>Il peut corriger tes erreurs</li>
+                            <li>Il peut améliorer ton site</li>
+                        </ul>
+                        <p><strong>Super utile :</strong> Comme avoir un professeur à côté de toi !</p>
+                    </div>
+
+                    <div class="app-card">
+                        <h4><span class="emoji">🎉</span>De la patience et de la curiosité</h4>
+                        <p><strong>C'est un apprentissage amusant !</strong></p>
+                        <ul>
+                            <li>30-45 minutes de ton temps</li>
+                            <li>L'envie d'apprendre quelque chose de nouveau</li>
+                            <li>Ne pas avoir peur de faire des erreurs</li>
+                        </ul>
+                        <p><strong>Important :</strong> Les erreurs, c'est normal ! On apprend en se trompant 😊</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="etape1">
+                <h2><span class="emoji">📝</span>ÉTAPE 1 : Créer ton compte GitHub (Gratuit !)</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Qu'est-ce que GitHub ?</h4>
+                    <p>GitHub, c'est comme un grand coffre-fort sur internet où tu peux ranger tous les fichiers de ton site web. C'est gratuit et c'est là que tous les programmeurs du monde entier gardent leur code ! 💾</p>
+                </div>
+                
+                <h3>1.1 Aller sur le site GitHub</h3>
+                <ol>
+                    <li>Ouvre ton navigateur web (Chrome, Firefox, Safari...)</li>
+                    <li>Tape dans la barre d'adresse : <strong>github.com</strong></li>
+                    <li>Tu vois un gros bouton vert "Sign up" ? Clique dessus ! 🟢</li>
+                </ol>
+
+                <h3>1.2 Créer ton compte</h3>
+                <ol>
+                    <li><strong>Choisis ton nom d'utilisateur</strong> - Ce sera comme ton surnom sur GitHub ! (ex: "marie-codeuse" ou "tom-websites")</li>
+                    <li><strong>Tape ton adresse email</strong> - Celle que tes parents t'ont donnée</li>
+                    <li><strong>Crée un mot de passe</strong> - Au moins 8 caractères avec des lettres et des chiffres (ex: "MonSiteWeb123")</li>
+                    <li><strong>Résoudre le puzzle</strong> - GitHub va te demander de prouver que tu n'es pas un robot 🤖</li>
+                    <li>Clique sur <strong>"Create account"</strong></li>
+                </ol>
+
+                <h3>1.3 Vérifier ton email</h3>
+                <ol>
+                    <li><strong>Va dans ta boîte email</strong> (Gmail, Yahoo, etc.)</li>
+                    <li><strong>Cherche un email de GitHub</strong> - Il sera peut-être dans les spams !</li>
+                    <li><strong>Clique sur le lien dans l'email</strong> - Cela va confirmer que l'email est bien à toi</li>
+                </ol>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Bravo ! Tu as réussi l'étape 1</h4>
+                    <ul class="checklist">
+                        <li>Ton compte GitHub est créé 🎉</li>
+                        <li>Ton email est vérifié ✓</li>
+                        <li>Tu peux te connecter sur github.com ✓</li>
+                    </ul>
+                    <p><strong>Félicitations !</strong> Tu es maintenant un membre officiel de la communauté GitHub ! 🚀</p>
+                </div>
+            </section>
+
+            <section id="etape2">
+                <h2><span class="emoji">📁</span>ÉTAPE 2 : Créer ton premier dépôt (repository)</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Qu'est-ce qu'un dépôt ?</h4>
+                    <p>Un dépôt (ou "repository" en anglais), c'est comme un dossier sur ton ordinateur, mais sur internet ! C'est là que tu vas mettre tous les fichiers de ton site web. 📂</p>
+                </div>
+                
+                <h3>2.1 Créer un nouveau dépôt</h3>
+                <ol>
+                    <li>Sur la page d'accueil de GitHub, cherche le bouton vert <strong>"New"</strong> ou <strong>"+"</strong></li>
+                    <li>Clique sur <strong>"New repository"</strong></li>
+                    <li>Tu vas voir une page avec plein d'options - ne t'inquiète pas, c'est plus simple que ça en a l'air ! 😊</li>
+                </ol>
+
+                <h3>2.2 Configurer ton dépôt</h3>
+                <ol>
+                    <li><strong>Nom du dépôt</strong> : Tape quelque chose comme "mon-premier-site" ou "mon-site-web" (sans espaces !)</li>
+                    <li><strong>Description</strong> : Écris "Mon premier site web créé avec Claude Code !" 🎉</li>
+                    <li><strong>Public ou Privé</strong> : Choisis <strong>"Public"</strong> - comme ça tout le monde pourra voir ton super travail !</li>
+                    <li><strong>Coche la case "Add a README file"</strong> - C'est comme la page d'accueil de ton dépôt</li>
+                </ol>
+
+                <h3>2.3 Créer le dépôt</h3>
+                <ol>
+                    <li>Vérifie que tout est correct</li>
+                    <li>Clique sur le gros bouton vert <strong>"Create repository"</strong></li>
+                    <li><strong>TADA ! 🎉</strong> Tu viens de créer ton premier dépôt sur GitHub !</li>
+                </ol>
+
+                <div class="warning-card">
+                    <h4><span class="emoji">💡</span>Conseil important</h4>
+                    <p>N'utilise jamais d'espaces dans le nom de ton dépôt ! Utilise plutôt des tirets (-) ou des underscores (_). Par exemple : "mon-site-web" ou "mon_site_web"</p>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Super ! Tu as réussi l'étape 2</h4>
+                    <ul class="checklist">
+                        <li>Ton dépôt est créé 📁</li>
+                        <li>Il a un nom cool ✓</li>
+                        <li>Il est public pour que tout le monde le voie ✓</li>
+                        <li>Il a un fichier README ✓</li>
+                    </ul>
+                    <p><strong>Tu progresses super bien !</strong> Maintenant on va ajouter tes fichiers web ! 🚀</p>
+                </div>
+            </section>
+
+            <section id="etape3">
+                <h2><span class="emoji">✍️</span>ÉTAPE 3 : Écrire les fichiers de ton site web</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Quels fichiers pour un site web ?</h4>
+                    <p>Un site web, c'est comme une maison ! Tu as besoin de :</p>
+                    <ul>
+                        <li><strong>index.html</strong> - La structure de ta maison (les murs, les pièces...)</li>
+                        <li><strong>style.css</strong> - La décoration (les couleurs, les meubles...)</li>
+                        <li><strong>script.js</strong> - Les équipements électriques (optionnel pour commencer)</li>
+                    </ul>
+                </div>
+                
+                <h3>3.1 Créer le fichier index.html</h3>
+                <ol>
+                    <li>Dans ton dépôt GitHub, clique sur <strong>"Add file"</strong> puis <strong>"Create new file"</strong></li>
+                    <li>Dans la boîte "Name your file", tape : <strong>index.html</strong></li>
+                    <li>Dans la grande boîte de texte, colle ce code magique :</li>
+                </ol>
+                
+                <div class="code-block"><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Premier Site Web !</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Bienvenue sur mon site ! 🎉</h1>
+    <p>Salut ! Je m'appelle [Ton Prénom] et c'est mon premier site web !</p>
+    <p>Je l'ai créé avec l'aide de Claude Code 🤖</p>
+    
+    <h2>Mes passe-temps favoris :</h2>
+    <ul>
+        <li>Jouer aux jeux vidéo 🎮</li>
+        <li>Lire des livres 📚</li>
+        <li>Apprendre à programmer 💻</li>
+    </ul>
+    
+    <p>Merci de visiter mon site ! 😊</p>
+</body>
+</html></div>
+
+                <h3>3.2 Créer le fichier style.css</h3>
+                <ol>
+                    <li>Clique sur <strong>"Commit new file"</strong> en bas de la page</li>
+                    <li>Clique encore sur <strong>"Add file"</strong> puis <strong>"Create new file"</strong></li>
+                    <li>Cette fois, tape : <strong>style.css</strong></li>
+                    <li>Colle ce code pour rendre ton site beau :</li>
+                </ol>
+                
+                <div class="code-block">body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #ffeb3b;
+    font-size: 2em;
+}
+
+p, li {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+ul {
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 10px;
+}</div>
+
+                <div class="warning-card">
+                    <h4><span class="emoji">💡</span>Personnalise ton site !</h4>
+                    <p>N'oublie pas de remplacer "[Ton Prénom]" par ton vrai prénom dans le fichier HTML ! Tu peux aussi changer les passe-temps par les tiens ! 😊</p>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Génial ! Tu as réussi l'étape 3</h4>
+                    <ul class="checklist">
+                        <li>Fichier index.html créé 📄</li>
+                        <li>Fichier style.css créé 🎨</li>
+                        <li>Ton contenu est personnalisé ✓</li>
+                    </ul>
+                    <p><strong>Ton site prend forme !</strong> Maintenant on va le mettre en ligne ! 🚀</p>
+                </div>
+            </section>
+
+            <section id="etape4">
+                <h2><span class="emoji">☁️</span>ÉTAPE 4 : Sauvegarder tes fichiers sur GitHub</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Qu'est-ce qu'un "commit" ?</h4>
+                    <p>Faire un "commit", c'est comme prendre une photo de ton travail et la sauvegarder ! GitHub va garder cette "photo" pour toujours, comme ça tu ne perdras jamais ton travail ! 📸</p>
+                </div>
+                
+                <h3>4.1 Sauvegarder ton fichier HTML</h3>
+                <ol>
+                    <li>Assure-toi que ton fichier index.html est bien écrit</li>
+                    <li>En bas de la page, tu vois "Commit new file" ?</li>
+                    <li>Dans la boîte "Commit message", écris : <strong>"Ajout de ma page d'accueil HTML"</strong></li>
+                    <li>Clique sur le bouton vert <strong>"Commit new file"</strong></li>
+                </ol>
+
+                <h3>4.2 Sauvegarder ton fichier CSS</h3>
+                <ol>
+                    <li>Fais pareil pour ton fichier style.css</li>
+                    <li>Message de commit : <strong>"Ajout des styles CSS pour mon site"</strong></li>
+                    <li>Clique sur <strong>"Commit new file"</strong></li>
+                </ol>
+
+                <h3>4.3 Vérifier que tout est là</h3>
+                <ol>
+                    <li>Retourne à la page principale de ton dépôt</li>
+                    <li>Tu devrais voir :
+                        <ul>
+                            <li>📄 README.md</li>
+                            <li>📄 index.html</li>
+                            <li>📄 style.css</li>
+                        </ul>
+                    </li>
+                    <li>Si tu vois tout ça, c'est parfait ! 🎉</li>
+                </ol>
+
+                <div class="warning-card">
+                    <h4><span class="emoji">💡</span>Conseil d'expert</h4>
+                    <p>Chaque fois que tu modifies quelque chose sur ton site, n'oublie pas de faire un "commit" ! C'est comme sauvegarder ton jeu vidéo - ça évite de perdre ton progrès ! 🎮</p>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Excellent ! Tu as réussi l'étape 4</h4>
+                    <ul class="checklist">
+                        <li>Tes fichiers HTML et CSS sont sauvegardés 💾</li>
+                        <li>Ils sont visibles dans ton dépôt ✓</li>
+                        <li>GitHub garde une trace de tous tes changements ✓</li>
+                    </ul>
+                    <p><strong>Ton site est prêt !</strong> Maintenant on va le publier sur internet avec Render ! 🌍</p>
+                </div>
+            </section>
+
+            <section id="etape5">
+                <h2><span class="emoji">🌐</span>ÉTAPE 5 : Créer ton compte Render (Gratuit !)</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Qu'est-ce que Render ?</h4>
+                    <p>Render, c'est comme un hôtel pour sites web ! Il va prendre ton site web qui est sur GitHub et le mettre sur internet pour que tout le monde puisse le voir. Et en plus, c'est gratuit ! 🏨</p>
+                </div>
+                
+                <h3>5.1 Aller sur le site Render</h3>
+                <ol>
+                    <li>Ouvre un nouvel onglet dans ton navigateur</li>
+                    <li>Tape dans la barre d'adresse : <strong>render.com</strong></li>
+                    <li>Tu vois le site de Render ? C'est parti ! 🚀</li>
+                </ol>
+
+                <h3>5.2 Créer ton compte Render</h3>
+                <ol>
+                    <li>Clique sur <strong>"Get Started for Free"</strong> ou <strong>"Sign Up"</strong></li>
+                    <li><strong>Choix malin :</strong> Clique sur <strong>"Sign up with GitHub"</strong> - comme ça pas besoin de retaper tes infos ! 🤓</li>
+                    <li>GitHub va te demander si tu authorises Render - clique <strong>"Authorize"</strong></li>
+                    <li>Render va peut-être te demander quelques infos supplémentaires - remplis-les</li>
+                </ol>
+
+                <h3>5.3 Vérifier ton compte</h3>
+                <ol>
+                    <li>Render peut t'envoyer un email de vérification - va le chercher !</li>
+                    <li>Clique sur le lien dans l'email</li>
+                    <li>Retourne sur Render - tu devrais être connecté ! 🎉</li>
+                </ol>
+
+                <div class="info-card">
+                    <h4><span class="emoji">💰</span>Pourquoi Render est gratuit ?</h4>
+                    <ul>
+                        <li>Render propose un plan gratuit pour les débutants</li>
+                        <li>Parfait pour apprendre et montrer tes projets</li>
+                        <li>Ton site sera un peu plus lent qu'un site payant, mais ça marche très bien !</li>
+                        <li>Tu pourras toujours passer à un plan payant plus tard si tu veux</li>
+                    </ul>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Génial ! Tu as réussi l'étape 5</h4>
+                    <ul class="checklist">
+                        <li>Ton compte Render est créé 🎉</li>
+                        <li>Il est connecté à ton GitHub 🔗</li>
+                        <li>Tu es prêt à publier ton site ✓</li>
+                    </ul>
+                    <p><strong>On y est presque !</strong> Maintenant on va connecter ton site GitHub avec Render ! 🚀</p>
+                </div>
+            </section>
+
+            <section id="etape6">
+                <h2><span class="emoji">🔗</span>ÉTAPE 6 : Connecter ton GitHub avec Render</h2>
+                
+                <div class="info-card">
+                    <h4><span class="emoji">🤔</span>Comment ça marche ?</h4>
+                    <p>Render va regarder dans ton dépôt GitHub, prendre tes fichiers HTML et CSS, et créer un vrai site web avec une vraie adresse internet ! C'est magique ! ✨</p>
+                </div>
+                
+                <h3>6.1 Créer un nouveau service</h3>
+                <ol>
+                    <li>Sur la page d'accueil de Render, clique sur <strong>"New +"</strong> en haut à droite</li>
+                    <li>Dans le menu qui s'ouvre, choisis <strong>"Static Site"</strong></li>
+                    <li>Render va te montrer tous tes dépôts GitHub - génial ! 🎉</li>
+                </ol>
+
+                <h3>6.2 Choisir ton dépôt</h3>
+                <ol>
+                    <li>Trouve ton dépôt dans la liste (celui que tu as créé à l'étape 2)</li>
+                    <li>Clique sur <strong>"Connect"</strong> à côté de ton dépôt</li>
+                    <li>Si tu ne le vois pas, clique sur <strong>"Configure account"</strong> pour autoriser plus de dépôts</li>
+                </ol>
+
+                <h3>6.3 Configurer ton site</h3>
+                <ol>
+                    <li><strong>Name</strong> : Donne un nom cool à ton site (ex: "mon-premier-site-web")</li>
+                    <li><strong>Branch</strong> : Laisse "main" - c'est parfait !</li>
+                    <li><strong>Root Directory</strong> : Laisse vide (ton site est à la racine)</li>
+                    <li><strong>Build Command</strong> : Laisse vide (pas besoin pour un site HTML simple)</li>
+                    <li><strong>Publish Directory</strong> : Tape juste <strong>"."</strong> (un point)</li>
+                    <li>Clique sur <strong>"Create Static Site"</strong></li>
+                </ol>
+
+                <div class="warning-card">
+                    <h4><span class="emoji">⏰</span>Patience, ça arrive !</h4>
+                    <p>Render va prendre quelques minutes pour créer ton site. Tu vas voir plein de messages qui défilent - c'est normal ! Il construit ton site web. 🏗️</p>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Super ! Tu as réussi l'étape 6</h4>
+                    <ul class="checklist">
+                        <li>Ton dépôt GitHub est connecté à Render 🔗</li>
+                        <li>Render est en train de construire ton site 🏗️</li>
+                        <li>Bientôt tu auras une vraie adresse web ! ✓</li>
+                    </ul>
+                    <p><strong>Le grand moment approche !</strong> Ton site va bientôt être en ligne ! 🚀</p>
+                </div>
+            </section>
+
+            <section id="etape7">
+                <h2><span class="emoji">🚀</span>ÉTAPE 7 : Test et vérification finale</h2>
+                
+                <h3>7.1 Accéder à votre application</h3>
+                <ol>
+                    <li><strong>Retournez à l'onglet principal</strong> de votre espace</li>
+                    <li><strong>Attendez que le status</strong> passe à "Running" (🟢)</li>
+                    <li><strong>Cliquez sur l'URL</strong> générée par Hugging Face :</li>
+                </ol>
+                <div class="code-block">https://huggingface.co/spaces/[VOTRE-NOM]/[NOM-ESPACE]</div>
+
+                <h3>7.2 Test des fonctionnalités par application</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span class="emoji">🚀</span>Test TAKEOFF_AI</h4>
+                        <p><strong>Interface principale :</strong></p>
+                        <ul class="checklist">
+                            <li>Page se charge correctement</li>
+                            <li>Zone d'upload PDF visible</li>
+                            <li>Pas d'erreurs d'API dans l'interface</li>
+                        </ul>
+                        <p><strong>Test d'estimation :</strong></p>
+                        <ul class="checklist">
+                            <li>Uploadez un plan PDF de construction</li>
+                            <li>Demandez : "Analysez ce plan et donnez-moi une estimation budgétaire"</li>
+                            <li>Vérifiez que l'IA génère un quantitatif détaillé</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4><span class="emoji">🏗️</span>Test EXPERTS_IA</h4>
+                        <p><strong>Interface principale :</strong></p>
+                        <ul class="checklist">
+                            <li>Sidebar avec sélection d'experts (60+) visible</li>
+                            <li>Chat interface fonctionnelle</li>
+                        </ul>
+                        <p><strong>Test de conversation :</strong></p>
+                        <ul class="checklist">
+                            <li>Sélectionnez un expert (ex: Entrepreneur Général)</li>
+                            <li>Posez une question : "Quel est le coût moyen d'une maison 2000 pi² ?"</li>
+                            <li>Vérifiez la réponse spécialisée</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4><span class="emoji">📝</span>Test NOTE_AI</h4>
+                        <p><strong>Interface principale :</strong></p>
+                        <ul class="checklist">
+                            <li>Zone de saisie de notes visible</li>
+                            <li>Options d'organisation disponibles</li>
+                        </ul>
+                        <p><strong>Test de fonctionnalités :</strong></p>
+                        <ul class="checklist">
+                            <li>Saisissez des notes de réunion</li>
+                            <li>Demandez une synthèse : "Résume ces notes en points clés"</li>
+                            <li>Testez l'organisation automatique</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4><span class="emoji">💼</span>Test ERP_AI</h4>
+                        <p><strong>Interface principale :</strong></p>
+                        <ul class="checklist">
+                            <li>Modules de gestion visibles</li>
+                            <li>Interface de navigation claire</li>
+                        </ul>
+                        <p><strong>Test de gestion :</strong></p>
+                        <ul class="checklist">
+                            <li>Explorez les modules CRM/Inventaire</li>
+                            <li>Testez l'ajout d'informations business</li>
+                            <li>Vérifiez les rapports générés</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="emoji">🔍</span>Test recherche web (toutes applications)</h4>
+                    <ul>
+                        <li>Tapez <span class="inline-code">/search [votre requête]</span> selon le contexte</li>
+                        <li>Vérifiez que la recherche fonctionne et s'intègre</li>
+                    </ul>
+                </div>
+
+                <h3>7.3 Résolution des problèmes courants</h3>
+
+                <div class="danger-card">
+                    <h4><span class="emoji">❌</span>Erreur "API Key Invalid"</h4>
+                    <ul>
+                        <li>Vérifiez que la clé est correctement copiée</li>
+                        <li>Redémarrez l'espace après ajout du secret</li>
+                        <li>Vérifiez que vous avez des crédits dans votre compte Claude</li>
+                    </ul>
+                </div>
+
+                <div class="danger-card">
+                    <h4><span class="emoji">❌</span>Application ne démarre pas</h4>
+                    <ul>
+                        <li>Consultez les logs dans l'onglet "Logs" de l'espace</li>
+                        <li>Vérifiez que requirements.txt est présent</li>
+                        <li>Contactez le support Hugging Face si nécessaire</li>
+                    </ul>
+                </div>
+
+                <div class="danger-card">
+                    <h4><span class="emoji">❌</span>Fonctionnalités spécifiques ne marchent pas</h4>
+                    <ul>
+                        <li><strong>TAKEOFF_AI</strong> : Vérifiez l'upload PDF et l'analyse d'estimation</li>
+                        <li><strong>EXPERTS_IA</strong> : Vérifiez que le dossier <span class="inline-code">profiles/</span> est présent</li>
+                        <li><strong>NOTE_AI</strong> : Vérifiez les permissions de sauvegarde</li>
+                        <li><strong>ERP_AI</strong> : Contrôlez l'accès aux modules de gestion</li>
+                    </ul>
+                </div>
+
+                <div class="success-card">
+                    <h4><span class="emoji">✅</span>Vérification finale complète</h4>
+                    <ul class="checklist">
+                        <li>Application choisie accessible publiquement</li>
+                        <li>Fonctionnalités spécifiques opérationnelles</li>
+                        <li>IA Claude répond correctement</li>
+                        <li>Pas d'erreurs dans les logs</li>
+                        <li>URL partageable générée</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="felicitations">
+                <h2><span class="emoji">🎉</span>FÉLICITATIONS ! Déploiement réussi</h2>
+                
+                <div class="success-card">
+                    <h4><span class="emoji">🔗</span>Votre application IA est maintenant en ligne !</h4>
+                    <p><strong>URL de votre application :</strong></p>
+                    <div class="code-block">https://huggingface.co/spaces/[VOTRE-NOM]/[NOM-ESPACE]</div>
+                </div>
+
+                <h3>🎯 Applications déployées avec succès :</h3>
+                <ul>
+                    <li><strong>🚀 TAKEOFF_AI</strong> : Votre assistant d'estimation budgétaire PDF</li>
+                    <li><strong>🏗️ EXPERTS_IA</strong> : Vos 60+ experts construction québécoise</li>
+                    <li><strong>📝 NOTE_AI</strong> : Votre assistant intelligent de prise de notes</li>
+                    <li><strong>💼 ERP_AI</strong> : Votre système de gestion d'entreprise IA</li>
+                </ul>
+
+                <h3>📊 Prochaines étapes recommandées</h3>
+
+                <div class="info-card">
+                    <h4><span class="emoji">🎨</span>Personnalisation</h4>
+                    <ul>
+                        <li>Modifiez le titre dans <span class="inline-code">app.py</span> selon votre usage</li>
+                        <li>Ajustez les couleurs dans <span class="inline-code">style.css</span> à votre charte</li>
+                        <li>Personnalisez le contenu selon l'application choisie</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="emoji">📊</span>Monitoring</h4>
+                    <ul>
+                        <li>Surveillez l'usage des crédits Claude dans la console</li>
+                        <li>Consultez les statistiques d'usage Hugging Face</li>
+                        <li>Configurez des alertes de dépense</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="emoji">🔗</span>Partage</h4>
+                    <ul>
+                        <li>Partagez l'URL avec vos collègues</li>
+                        <li>Ajoutez le lien à votre signature email</li>
+                        <li>Créez une documentation utilisateur</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="emoji">⚡</span>Optimisation</h4>
+                    <ul>
+                        <li>Analysez l'usage pour améliorer l'application</li>
+                        <li>Collectez les retours utilisateurs</li>
+                        <li>Planifiez les mises à jour selon vos besoins</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="optimisation">
+                <h2><span class="emoji">💡</span>Conseils pour optimiser vos coûts</h2>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4><span class="emoji">💰</span>Gestion des crédits Claude</h4>
+                        <ul>
+                            <li><strong>Surveillez</strong> votre consommation dans la console Anthropic</li>
+                            <li><strong>Définissez des limites</strong> de dépense mensuelles</li>
+                            <li><strong>Optimisez les prompts</strong> pour réduire les tokens</li>
+                            <li><strong>Utilisez le cache</strong> pour éviter les répétitions</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4><span class="emoji">🚀</span>Optimisations Hugging Face</h4>
+                        <ul>
+                            <li><strong>CPU Basic gratuit</strong> : Suffisant pour la plupart des usages</li>
+                            <li><strong>Upgradez seulement</strong> si vous avez beaucoup de trafic</li>
+                            <li><strong>Spaces persistants</strong> : Gardent l'application active</li>
+                            <li><strong>Analytics intégrées</strong> : Suivez l'usage de votre app</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h4><span class="emoji">📈</span>Évolution et améliorations futures</h4>
+                        <ul>
+                            <li><strong>Collecte de feedback</strong> : Intégrez un système de retours utilisateurs</li>
+                            <li><strong>Métriques d'usage</strong> : Analysez les fonctionnalités les plus utilisées</li>
+                            <li><strong>Mise à jour continue</strong> : Enrichissez le contenu selon l'application</li>
+                            <li><strong>Versions spécialisées</strong> : Adaptez aux besoins spécifiques de votre secteur</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="support">
+                <h2><span class="emoji">📞</span>Support et ressources</h2>
+
+                <div class="info-card">
+                    <h4><span class="emoji">📚</span>Documentation officielle</h4>
+                    <ul>
+                        <li><strong>Anthropic Claude</strong> : https://docs.anthropic.com/</li>
+                        <li><strong>Hugging Face Spaces</strong> : https://huggingface.co/docs/hub/spaces</li>
+                        <li><strong>Streamlit</strong> : https://docs.streamlit.io/</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="emoji">👥</span>Support communautaire</h4>
+                    <ul>
+                        <li><strong>Discord Hugging Face</strong> : https://discord.gg/hugging-face</li>
+                        <li><strong>Forum Anthropic</strong> : https://community.anthropic.com/</li>
+                        <li><strong>GitHub Issues</strong> : Pour les bugs techniques</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <footer class="footer">
+            <h3><span class="emoji">🏆</span>Votre application IA est maintenant opérationnelle et accessible 24/7 !</h3>
+            <p><em>Guide créé avec ❤️ pour démocratiser l'accès aux applications IA spécialisées</em></p>
+        </footer>
+
+        </div>
+    </div>
+
+    <script>
+        // Navigation active link
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        function setActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', setActiveLink);
+
+        // Navigation fluide vers les sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Menu mobile
+        const mobileMenuToggle = document.createElement('button');
+        mobileMenuToggle.innerHTML = '☰';
+        mobileMenuToggle.style.cssText = `
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            padding: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        `;
+
+        document.body.appendChild(mobileMenuToggle);
+
+        mobileMenuToggle.addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        });
+
+        // Show mobile menu button on small screens
+        function checkMobile() {
+            if (window.innerWidth <= 768) {
+                mobileMenuToggle.style.display = 'block';
+            } else {
+                mobileMenuToggle.style.display = 'none';
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        window.addEventListener('resize', checkMobile);
+        checkMobile();
+
+        // Animation d'apparition des éléments
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Observer tous les éléments de contenu
+        document.querySelectorAll('.content > section, .app-card, .feature-card, .info-card, .success-card, .warning-card, .danger-card').forEach((el) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Effet de brillance périodique sur les cartes importantes
+        setInterval(() => {
+            const cards = document.querySelectorAll('.success-card, .app-card');
+            cards.forEach(card => {
+                card.style.boxShadow = '0 4px 20px rgba(34, 197, 94, 0.3)';
+                setTimeout(() => {
+                    card.style.boxShadow = '';
+                }, 1000);
+            });
+        }, 10000);
+
+        // Initialize
+        setActiveLink();
+    </script>
+</body>
+</html>
